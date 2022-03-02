@@ -6,6 +6,14 @@
         <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="css/leaflet.css">
         <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
         <link rel="stylesheet" href="css/leaflet-search.css">
@@ -15,15 +23,45 @@
         html, body, #map {
             width: 100%;
             height: 100%;
-            padding: 0;
+            padding-bottom: 28px;
             margin: 0;
         }
+
         </style>
         <title></title>
     </head>
-    <body>
-       <div id="footer2"> 
-            <span id="infobtn"><img src="images/logo.png" alt="" width="120" height="120"></span>
+    <body >
+           
+<nav class="navbar navbar-expand-sm navbar-dark flex-sm-nowrap flex-wrap" style="vertical-align:center; background-color: chocolate;">
+    <div class="container">
+        
+        <a class="navbar-brand flex-grow-1 text-white">Visor prueba</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#upNavbar" aria-expanded="false" aria-label="toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="navbar-collapse collapse flex-grow-1 justify-content-center" id="upNavbar">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Visor<span class="sr-only"></span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" target="_blank" href="http://www.nuevaimperial.cl">Nosotros</a>
+            </li>
+            <li class="nav-item">
+                <a donwnload class="nav-link" target="_blank" href="data/map_2.pdf">Descargar mapa</a>
+            </li>
+        </ul>
+    </div>
+    </div>
+    
+</nav>
+<div id="container" class="container-fluid">
+    <div id="map1">
+    </div>
+</div>
+       <div style="background-color: blue;" id="footer2"> 
+            <span id="infobtn"><img src="images/images_ni.png" alt="" width="120" height="120"></span>
         </div>
 
         <div id="map">
@@ -71,6 +109,7 @@
             function setBounds() {
                 map.setMaxBounds(map.getBounds());
             }
+        
             map.createPane('pane_ESRIMaps_0');
             map.getPane('pane_ESRIMaps_0').style.zIndex = 400;
             var layer_ESRIMaps_0 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
@@ -84,6 +123,21 @@
             });
             layer_ESRIMaps_0;
             map.addLayer(layer_ESRIMaps_0);
+
+            map.createPane('pane_openStreet');
+            map.getPane('pane_openStreet').style.zIndex = 399;
+            var layer_openStreet = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                pane: 'pane_openStreet',
+                opacity: 1.0,
+                attribution: '',
+                minZoom: 10,
+                maxZoom: 14,
+                minNativeZoom: 0,
+                maxNativeZoom: 18
+            });
+
+
+
             function pop_LocalidadesRurales_1(feature, layer) {
                 layer.on({
                     mouseout: function (e) {
@@ -101,6 +155,9 @@
                                     <tr>\
                                         <th scope="row">Código INE:</th>\
                                         <td>' + (feature.properties['Código INE'] !== null ? autolinker.link(feature.properties['Código INE'].toLocaleString()) : '') + '</td>\
+                                    </tr>\
+                                    <tr>\
+                                         <td>' + "Esto se puede personalizar según lo que se requiera." + '</td>\
                                     </tr>\
                                 </table>';
                 layer.bindPopup(popupContent, { maxHeight: 400 });
@@ -279,7 +336,7 @@
             });
             bounds_group.addLayer(layer_Establecimientosdesalud_3);
             map.addLayer(layer_Establecimientosdesalud_3);
-            var baseMaps = { "Mapa Base - ESRI Satélite": layer_ESRIMaps_0 };
+            var baseMaps = { "Mapa Base - ESRI Satélite": layer_ESRIMaps_0, "Mapa Base - Open Street Maps": layer_openStreet};
             L.control.layers(baseMaps, { 'Establecimientos de salud<br /><table><tr><td style="text-align: center;"><img src="legend/Establecimientosdesalud_3_ConsultorioGeneralRuralCGR0.png" /></td><td>Consultorio General Rural (CGR)</td></tr><tr><td style="text-align: center;"><img src="legend/Establecimientosdesalud_3_PostadeSaludRuralPSR1.png" /></td><td>Posta de Salud Rural (PSR)</td></tr></table>': layer_Establecimientosdesalud_3, '<img src="legend/Lmitecomunal_2.png" /> Límite comunal': layer_Lmitecomunal_2, '<img src="legend/LocalidadesRurales_1.png" /> Localidades Rurales': layer_LocalidadesRurales_1, }, { collapsed: true }).addTo(map);
             setBounds();
             map.addControl(new L.Control.Search({
@@ -288,155 +345,12 @@
                 hideMarkerOnCollapse: true,
                 propertyName: 'Nombre'
             }));
+            
             document.getElementsByClassName('search-button')[0].className +=
                 ' fa fa-binoculars';
-            var mapDiv = document.getElementById('map');
-            var row = document.createElement('div');
-            row.className = "row";
-            row.id = "all";
-            row.style.height = "100%";
-            var col1 = document.createElement('div');
-            col1.className = "col9";
-            col1.id = "mapWindow";
-            col1.style.height = "99%";
-            col1.style.width = "80%";
-            col1.style.display = "inline-block";
-            var col2 = document.createElement('div');
-            col2.className = "col3";
-            col2.id = "menu";
-            col2.style.display = "inline-block";
-            mapDiv.parentNode.insertBefore(row, mapDiv);
-            document.getElementById("all").appendChild(col1);
-            document.getElementById("all").appendChild(col2);
-            col1.appendChild(mapDiv)
-            var Filters = { "Ubicación": "str" };
-            function filterFunc() {
-                map.eachLayer(function (lyr) {
-                    if ("options" in lyr && "dataVar" in lyr["options"]) {
-                        features = this[lyr["options"]["dataVar"]].features.slice(0);
-                        try {
-                            for (key in Filters) {
-                                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
-                                if (Filters[key] == "str" || Filters[key] == "bool") {
-                                    var selection = [];
-                                    var options = document.getElementById("sel_" + keyS).options
-                                    for (var i = 0; i < options.length; i++) {
-                                        if (options[i].selected) selection.push(options[i].value);
-                                    }
-                                    try {
-                                        if (key in features[0].properties) {
-                                            for (i = features.length - 1;
-                                                i >= 0; --i) {
-                                                if (selection.indexOf(
-                                                    features[i].properties[key]) < 0
-                                                    && selection.length > 0) {
-                                                    features.splice(i, 1);
-                                                }
-                                            }
-                                        }
-                                    } catch (err) {
-                                    }
-                                }
-                                if (Filters[key] == "int") {
-                                    sliderVals = document.getElementById(
-                                        "div_" + keyS).noUiSlider.get();
-                                    try {
-                                        if (key in features[0].properties) {
-                                            for (i = features.length - 1; i >= 0; --i) {
-                                                if (parseInt(features[i].properties[key])
-                                                    < sliderVals[0]
-                                                    || parseInt(features[i].properties[key])
-                                                    > sliderVals[1]) {
-                                                    features.splice(i, 1);
-                                                }
-                                            }
-                                        }
-                                    } catch (err) {
-                                    }
-                                }
-                                if (Filters[key] == "real") {
-                                    sliderVals = document.getElementById(
-                                        "div_" + keyS).noUiSlider.get();
-                                    try {
-                                        if (key in features[0].properties) {
-                                            for (i = features.length - 1; i >= 0; --i) {
-                                                if (features[i].properties[key]
-                                                    < sliderVals[0]
-                                                    || features[i].properties[key]
-                                                    > sliderVals[1]) {
-                                                    features.splice(i, 1);
-                                                }
-                                            }
-                                        }
-                                    } catch (err) {
-                                    }
-                                }
-                                if (Filters[key] == "date"
-                                    || Filters[key] == "datetime"
-                                    || Filters[key] == "time") {
-                                    try {
-                                        if (key in features[0].properties) {
-                                            HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
-                                            startdate = document.getElementById("dat_" +
-                                                HTMLkey + "_date1").value.replace(" ", "T");
-                                            enddate = document.getElementById("dat_" +
-                                                HTMLkey + "_date2").value.replace(" ", "T");
-                                            for (i = features.length - 1; i >= 0; --i) {
-                                                if (features[i].properties[key] < startdate
-                                                    || features[i].properties[key] > enddate) {
-                                                    features.splice(i, 1);
-                                                }
-                                            }
-                                        }
-                                    } catch (err) {
-                                    }
-                                }
-                            }
-                        } catch (err) {
-                        }
-                        this[lyr["options"]["layerName"]].clearLayers();
-                        this[lyr["options"]["layerName"]].addData(features);
-                    }
-                })
-            }
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_Ubicacin = document.createElement('div');
-            div_Ubicacin.id = "div_Ubicacin";
-            div_Ubicacin.className = "filterselect";
-            document.getElementById("menu").appendChild(div_Ubicacin);
-            sel_Ubicacin = document.createElement('select');
-            sel_Ubicacin.multiple = true;
-            sel_Ubicacin.size = 9;
-            sel_Ubicacin.id = "sel_Ubicacin";
-            var Ubicacin_options_str = "<option value='' unselected></option>";
-            sel_Ubicacin.onchange = function () { filterFunc() };
-            Ubicacin_options_str += '<option value="Sector Alto Boroa">Sector Alto Boroa</option>';
-            Ubicacin_options_str += '<option value="Sector Bochoco">Sector Bochoco</option>';
-            Ubicacin_options_str += '<option value="Sector Boroa-Filulawen">Sector Boroa-Filulawen</option>';
-            Ubicacin_options_str += '<option value="Sector Chivilcoyan">Sector Chivilcoyan</option>';
-            Ubicacin_options_str += '<option value="Sector Mañío Ducañán">Sector Mañío Ducañán</option>';
-            Ubicacin_options_str += '<option value="Sector Miramar">Sector Miramar</option>';
-            Ubicacin_options_str += '<option value="Sector Molco">Sector Molco</option>';
-            Ubicacin_options_str += '<option value="Sector Queupue">Sector Queupue</option>';
-            Ubicacin_options_str += '<option value="Sector Rulo">Sector Rulo</option>';
-            sel_Ubicacin.innerHTML = Ubicacin_options_str;
-            div_Ubicacin.appendChild(sel_Ubicacin);
-            var lab_Ubicacin = document.createElement('div');
-            lab_Ubicacin.innerHTML = 'Ubicación';
-            lab_Ubicacin.className = 'filterlabel';
-            div_Ubicacin.appendChild(lab_Ubicacin);
-            var reset_Ubicacin = document.createElement('div');
-            reset_Ubicacin.innerHTML = 'Limpiar Filtro';
-            reset_Ubicacin.className = 'filterlabel';
-            reset_Ubicacin.onclick = function () {
-                var options = document.getElementById("sel_Ubicacin").options;
-                for (var i = 0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_Ubicacin.appendChild(reset_Ubicacin);
+
+            
+
         </script>
     </body>
 </html>
