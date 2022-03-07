@@ -15,10 +15,13 @@
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="css/leaflet.css">
+        <script src="js/leaflet.js"></script>
         <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
         <link rel="stylesheet" href="css/leaflet-search.css">
         <link rel="stylesheet" href="css/filter.css">
-<link rel="stylesheet" href="css/nouislider.min.css">
+        <link rel="stylesheet" href="css/nouislider.min.css">
+        <link rel="stylesheet" src="css/L.Control.Locate.scss" />
+        <script src="js/L.Control.Locate.js"></script>
         <style>
         html, body, #map {
             width: 100%;
@@ -30,7 +33,7 @@
         </style>
         <title></title>
     </head>
-    <body >
+    <body>
            
 <nav class="navbar navbar-expand-sm navbar-dark flex-sm-nowrap flex-wrap" style="vertical-align:center; background-color: chocolate;">
     <div class="container">
@@ -68,7 +71,7 @@
         </div>
 
         <script src="js/qgis2web_expressions.js"></script>
-        <script src="js/leaflet.js"></script>
+      
         <script src="js/leaflet.rotatedMarker.js"></script>
         <script src="js/leaflet.pattern.js"></script>
         <script src="js/leaflet-hash.js"></script>
@@ -84,6 +87,7 @@
         <script src="data/Lmitecomunal_2.js"></script>
         <script src="data/Establecimientosdesalud_3.js"></script>
         <script>
+
             var highlightLayer;
             function highlightFeature(e) {
                 highlightLayer = e.target;
@@ -349,8 +353,15 @@
             document.getElementsByClassName('search-button')[0].className +=
                 ' fa fa-binoculars';
 
-            
+            var lc = L.control.locate({
+     position: 'topleft',
+                enableHighAccuracy: true,
+        strings: {
+        title: "KIUS"
+    }
+}).addTo(map);
 
+L.control.locate(OPTIONS).addTo(map);
         </script>
     </body>
 </html>
